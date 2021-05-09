@@ -1,5 +1,8 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": "75901228-2832-42d1-a50d-17010c8ea3f6"
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
@@ -18,8 +21,11 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
+            "customWebpackConfig": {
+              "path": "./webpack.config.js"
+            },
             "outputPath": "dist/test-app",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -66,7 +72,10 @@
           }
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular-builders/custom-webpack:dev-server",
+          "customWebpackConfig": {
+            "path":"./webpack.config.js"
+          },
           "options": {
             "browserTarget": "test-app:build"
           },
@@ -83,8 +92,11 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/custom-webpack:karma",
           "options": {
+            "customWebpackConfig": {
+              "path":"./webpack.config.js"
+            },
             "main": "src/test.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
