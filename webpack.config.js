@@ -14,25 +14,28 @@ module.exports = (config) => {
   const indexForAngularWebpackPlugin = config.plugins?.findIndex((plugin) => {
     return plugin instanceof AngularWebpackPlugin;
   });
+
   if (indexForAngularWebpackPlugin > -1) {
     const oldOptions = config.plugins?.[indexForAngularWebpackPlugin].pluginOptions;
     oldOptions.directTemplateLoading = false;
     config.plugins?.splice(indexForAngularWebpackPlugin);
     config.plugins?.push(new AngularWebpackPlugin(oldOptions));
   }
-  const configPluginSourceMapDevToolPlugin = {
-    filename: "[file].map",
-    include: [
-      /js$/, /css$/
-    ],
-    sourceRoot: "webpack:///",
-    moduleFilenameTemplate: "[resource-path]"
-  }
-
+  // if you start tests, you have to add config for plugin Source Map Dev Tool
   if (config.entry?.main?.includes('test')) {
     const indexForSourceMapDevToolPlugin = config.plugins?.findIndex(plugin => {
       return plugin instanceof SourceMapDevToolPlugin;
     })
+
+    //config to add source map on tests
+    const configPluginSourceMapDevToolPlugin = {
+      filename: "[file].map",
+      include: [
+        /js$/, /css$/
+      ],
+      sourceRoot: "webpack:///",
+      moduleFilenameTemplate: "[resource-path]"
+    }
 
     if (indexForSourceMapDevToolPlugin > -1) {
       config.plugins?.splice(indexForSourceMapDevToolPlugin);
